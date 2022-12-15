@@ -1,0 +1,25 @@
+{
+	"name": "tsdidact",
+	"version": "1.0.0",
+	"description": "rodrigo pomber's didact tutorial in typescript",
+	"main": "dist/index.js",
+	"scripts": {
+		"watch": "npx tsc -w src/index.tsx --outDir dist --jsx \"preserve\"",
+		"transform": "./node_modules/.bin/babel --plugins @babel/plugin-transform-react-jsx dist --out-dir lib",
+		"build": "npx webpack build --config ./webpack.config.js",
+		"dev": "npx tsc src/index.tsx --outDir dist --jsx \"preserve\" & npm run transform & npm run build",
+		"monitor": "nodemon --exec \"npm run dev\" --watch src/index.tsx"
+	},
+	"author": "Abhimanyu",
+	"license": "MIT",
+	"dependencies": {
+		"@types/node": "^18.11.10",
+		"nodemon": "^2.0.20"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.19.3",
+		"@babel/core": "^7.20.5",
+		"@babel/plugin-transform-react-jsx": "^7.19.0",
+		"webpack-cli": "^5.0.1"
+	}
+}
