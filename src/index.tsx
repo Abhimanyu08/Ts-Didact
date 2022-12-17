@@ -7,7 +7,7 @@ import * as Didact from "./Didact";
 const elem: ReturnType<typeof Didact.createElement> = (
 	<div foo="bar">
 		<p foo1="bar1">hi</p>
-		<span>hello</span>
+		<span>bye</span>
 	</div>
 );
 
