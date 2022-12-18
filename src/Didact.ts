@@ -2,6 +2,7 @@ import { createElementReturnType } from "./interfaces/createElementReturnType"
 import { createTextNodeReturnType } from "./interfaces/createTextNodeReturnType"
 import Fiber from "./interfaces/Fibers"
 import { ChildrenType, PropsType } from "./interfaces/utils"
+import { commitWork } from "./utils/commitRoot"
 import { performUnitOfWork } from "./utils/performUnitOfWork"
 
 const createTextNode = (text: string): createTextNodeReturnType => {
@@ -65,6 +66,7 @@ export const render = (root: HTMLElement, element: createElementReturnType | cre
         } as PropsType,
         sibling: null
     }
+    let initialRoot = nextUnitOfWork
 
     const workLoop: IdleRequestCallback = (deadline) => {
 
@@ -74,10 +76,27 @@ export const render = (root: HTMLElement, element: createElementReturnType | cre
             shouldStop = deadline.timeRemaining() < 1
         }
 
+        if (!nextUnitOfWork && initialRoot) {
+            //there's no more work to be done, so let's commit the whole tree to the dom
+            //Also initialRoot will have a child now
+            commitRoot()
+        }
+
         requestIdleCallback(workLoop)
     }
 
+    function commitRoot() {
+        //it is the job of a child to attach itself to its parent, because every child has a pointer to its parent, but the parent only  has a pointer to its first child
+        commitWork(initialRoot.child)
+
+        initialRoot = null
+    }
+
     requestIdleCallback(workLoop)
+
+
+
+
 
 }
 

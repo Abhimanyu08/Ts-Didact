@@ -8,9 +8,12 @@ export function performUnitOfWork(unitOfWork: Fiber): Fiber | null {
         unitOfWork.dom = unitOfWork.type === "TEXT_ELEMENT" ? document.createTextNode(unitOfWork.props.nodeValue) : document.createElement(unitOfWork.type)
     }
 
-    if (unitOfWork.parent) {
-        unitOfWork.parent.dom.appendChild(unitOfWork.dom)
-    }
+    //The problem with 13-15 is that we are appending to the dom on each step, which means if browser stops our loop,
+    // we'll have an incomplete UI. So let's remove those problematic lines
+
+    // if (unitOfWork.parent) {
+    //     unitOfWork.parent.dom.appendChild(unitOfWork.dom)
+    // }
 
     //------------Make fibers out of all children-------------
     let prevFiber: Fiber | null = null
